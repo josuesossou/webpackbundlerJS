@@ -6,4 +6,4 @@
 Edit the s3main.js to suit your need
 
 ## To run the file
-### npm run dev
+### npm run build

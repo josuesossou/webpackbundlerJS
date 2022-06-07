@@ -15,9 +15,9 @@ import { S3Client, PutObjectCommand, ListObjectsCommand, DeleteObjectCommand, De
  * If withPoolId is set to true, you must provide a poolID, no need for IAM credentials
  */
 const initialize = (region, bucketName, {iamCredentials={}, withPoolId=false, poolID='',} = {}) => {
-  if (!region) return alert('A region must be provided')
-  if (withPoolId && poolID === '') return alert('Must provide a poolID if you want to identity pool')
-  if (!withPoolId && !iamCredentials) return alert('IAM Credentials must be provided as an object')
+  if (!region) return
+  if (withPoolId && poolID === '') return
+  if (!withPoolId && !iamCredentials) return
   
   let s3 = null
   if (withPoolId) {
