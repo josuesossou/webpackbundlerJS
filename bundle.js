@@ -35677,7 +35677,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 const initialize = async (region, bucketName, {iamCredentials={}, withPoolId=false, poolID='',} = {}) => {
   window.s3Connected = false
-  
+
   if (withPoolId) {
     window.whichCredential = 'cognitopool'
   } else {
@@ -35723,6 +35723,7 @@ const initialize = async (region, bucketName, {iamCredentials={}, withPoolId=fal
 
 window.aws_init = initialize
 window.s3Connected = false
+window.whichCredential = 'iam'
 
 })();
 
