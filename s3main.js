@@ -14,11 +14,19 @@ import { S3Client, PutObjectCommand, ListObjectsCommand, DeleteObjectCommand, De
  * make sure not to make your keys viewable by the public.
  * If withPoolId is set to true, you must provide a poolID, no need for IAM credentials
  */
-const initialize = (region, bucketName, {iamCredentials={}, withPoolId=false, poolID='',} = {}) => {
+const initialize = async (region, bucketName, {iamCredentials={}, withPoolId=false, poolID='',} = {}) => {
+  window.s3Connected = false
+  
+  if (withPoolId) {
+    window.whichCredential = 'cognitopool'
+  } else {
+    window.whichCredential = 'iam'
+  }
+
   if (!region) return
   if (withPoolId && poolID === '') return
   if (!withPoolId && !iamCredentials) return
-  
+
   let s3 = null
   if (withPoolId) {
     s3 = new S3Client({
@@ -35,13 +43,22 @@ const initialize = (region, bucketName, {iamCredentials={}, withPoolId=false, po
     })
   }
 
-  window.s3 = s3
-  window.bucketName = bucketName
+  try {
+    await s3.send(
+      new ListObjectsCommand({ Delimiter: '/', Bucket: bucketName,  })
+    )
+    // can successfully connect
+    window.s3 = s3
+    window.bucketName = bucketName
+    window.s3Connected = true
+    window.PutObjectCommand = PutObjectCommand, 
+    window.ListObjectsCommand = ListObjectsCommand, 
+    window.DeleteObjectCommand = DeleteObjectCommand, 
+    window.DeleteObjectsCommand = DeleteObjectsCommand
+  } catch (error) {
+    window.s3Connected = false
+  }
 }
 
 window.aws_init = initialize
-window.isAwsInit = false
-window.PutObjectCommand = PutObjectCommand, 
-window.ListObjectsCommand = ListObjectsCommand, 
-window.DeleteObjectCommand = DeleteObjectCommand, 
-window.DeleteObjectsCommand = DeleteObjectsCommand
+window.s3Connected = false

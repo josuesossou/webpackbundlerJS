@@ -11,7 +11,8 @@ module.exports = {
     // Enable WebPack to use the 'path' package.
     resolve:{
         fallback: { path: require.resolve("path-browserify")}
-    }
+    },
+    devtool: "source-map"
     /**
      * In Webpack version v2.0.0 and earlier, you must tell 
      * webpack how to use "json-loader" to load 'json' files.
